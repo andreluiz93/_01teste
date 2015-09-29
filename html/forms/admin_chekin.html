@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Estaciona PA</title>
+	<link rel="stylesheet" type="text/css" href="../../css/forms/central_form.css">
+	<link rel="stylesheet" type="text/css" href="../../css/layout/central_layout.css">	
+</head>
+<body>
+
+<nav class="menu">
+    <ul class="itemMenu">
+        <li><a href="../../index.html">Inicio</a></li>
+        <li><a>Administração</a>
+            <ul>
+                <li><a>Cadastros</a>
+                    <ul>
+                        <li><a href="../forms/admin_cad_users.html">Usuários</a></li>
+                        <li><a href="../forms/admin_cad_cars.html">Veículos</a></li>
+                    </ul>
+                </li>
+                <li><a href="../forms/admin_edit_users.html">Editar Usuários</a></li>
+                <li><a href="../forms/admin_delet_user.html">Excluir Usuários</a></li>
+            </ul>
+        </li>
+        <li><a>Relatórios</a>
+            <ul>
+                <li><a href="../forms/admin_relat_inf_user.html">Inf. Usuarios</a></li>
+                <li><a href="../forms/admin_relat_placaxcarro.html">Carros x Placa</a></li>
+            </ul>
+        </li>
+        <li><a>Realizar Check-in</a></li>
+        <li><a href="../../php/login/valid_access.php" id="nameMenu" >(Checando login...)</a>
+            <ul>
+                <li><a href="../../php/operation/exiting.php">Sair</a></li>
+            </ul>
+        </li>	 
+    </ul>
+</nav>
+
+<h1>Realizar Checkin</h1>
+<form id = "checkIn" action="" method="post">
+
+	<fieldset>
+	
+		<legend>Comprovante</legend>
+    
+		<label for="numCheckIn">Número do Comprovante:
+		    <input type="text" name="numComp" id="numComp">
+		</label>
+
+		<button id="submit">Gerar Relatorio</button>
+
+	</fieldset>
+
+</form>
+
+<script type="text/javascript" src="../../scripts/jquery-2.1.4.min.js"></script>
+<script src="../../scripts/js/literal_objetcts/root_path_l2.js"></script>
+<script src="../../scripts/js/menu/name_menu_service.js"></script>
+<script src="../../scripts/js/menu/name_menu_control.js"></script>
+
+
+</body>
+</html>
