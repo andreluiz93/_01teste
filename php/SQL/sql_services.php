@@ -2,7 +2,24 @@
 
 class SQLService {
     
-    public function mySqlResult($query){
+    //
+    //--------------EXECUTE AND SENDS THE MYSQL QUERIES
+    //
+    
+    public function onlySendQuery($sql){
+        $validate = mysql_query($sql);
+    }
+    
+    public function validateSQLExecutes($result, $insert){
+         if(($result[0] > 0 and $insert=='no')
+                            or 
+            (isset($result) and $insert=='yes'))
+                return 'done';
+        else
+            return 'dont';
+    }
+    
+    public function mySqlResult($query){;
         $toSend = mysql_query($query);
         $result = mysql_result($toSend, 0);
         return $result;
@@ -14,7 +31,10 @@ class SQLService {
         return $row[0];
     }
     
-    //SELECT/WHERE SQL command for 1 field where are 1 field to be filter (1x1)
+    //
+    //--------------BUILDS THE QUERIES
+    //
+
     public function BuildSelecFromWhere($fieldToSelect, $table, $fieldToFilter, $filter){
         
         $query = "SELECT $fieldToSelect 
@@ -22,7 +42,6 @@ class SQLService {
                   WHERE $fieldToFilter = '$filter';";
                 
         return $query;
-        
     }
     
     public static function BuildSelectCountWhere($table, $fieldToFilter, $filter){
@@ -33,24 +52,42 @@ class SQLService {
     
         return $sql;
     }
+    
+    //operation/insert_user.php
+    public static function BuildSqlInsertUsers($nome, $usuario, $criptografada, $email, 
+                                               $cpf, $end, $num, $comp, $bairro, $cep, 
+                                               $cidade, $estado, $tel, $cel, $acesso) {
+    
+        $sql =  "INSERT INTO pessoas (
+                    nome, usuario, senha, email, cpf, endereco, 
+                    numero, complemento, bairro, cep, cidade, estado, telefone, celular, acesso
+                ) 
+                VALUES (
+                    '{$nome}','{$usuario}','{$criptografada}',
+                    '{$email}','{$cpf}','{$end}','{$num}','{$comp}',
+                    '{$bairro}','{$cep}','{$cidade}','{$estado}','{$tel}',
+                    '{$cel}','{$acesso}'
+                )";
+                
+        return $sql;
+    }
+    
+    //operation/cad_cars.php
+    public static function BuildSqlInsertCar($user, $placa, $marca, $mod){
+        
+        
+        $sql = "INSERT INTO carro
+                (placa, marca_id, pessoas_id, modelo_id)
+                values
+                ('{$placa}', '{$marca}', '{$user}', '{$mod}')";
+            
+        return $sql;
+    }
 }
     
     /*
     //------------------------REQUISIÇÕES--------------------------
-    //Requisita o nível de acesso de um determinado usuário
-    //login/valid_access.php
-    public static function requestAccess($usuario) {
-        
-        $sql = "SELECT acesso FROM pessoas
-                      WHERE usuario = '$usuario'";
-        
-        $query = mysql_query($sql);
-        $result = mysql_result($query, 0);
-        
-        return $result;
-        
-    }
-    
+
     //Requisita o ID do usuario
     //operation/cad_cars.php
     public static function requestIDUser($user){

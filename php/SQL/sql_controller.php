@@ -33,62 +33,92 @@ class SqlController {
         $conn->Conn('remoto');
     }
 
+    //
+    //REQUESTS
+    //
+
     public static function Request($type, $var){
+        
+        //Realize a query to request a determinate value, from determinate filter
         
         $sql = new SQLService;
 
+        //login/valid_access.php
         if($type == 'RequestAccess'){
             
             $validateUser = SqlController::Validate('CheckUser', $var);
-            if($validateUser == 'invalido') return 'nullUser';
+            if($validateUser == 'invalido') return 'nullUserPass';
             
-            //Realize a query to field 'acesso', on the table 'pessoas', where 'usuario' equal $var
             $query = $sql->BuildSelecFromWhere('acesso', 'pessoas', 'usuario', $var);
-            return $sql->mySqlResult($query);
         }
         
-        elseif($type == 'RequestName'){
-            
-            //Realize a query to field 'nome', on the table 'pessoas', where 'usuario' equal $var
+        //login/name_user.php
+        elseif($type == 'RequestName') 
             $query = $sql->BuildSelecFromWhere('acesso', 'pessoas', 'usuario', $var);
-            return $sql->mySqlResult($query);
-        }
-     
+        
+        //operation/cad_cars.php
+        elseif($type == 'RequestIdUser') 
+            $query = $sql->BuildSelecFromWhere('id', 'pessoas', 'usuario', $var);
+        
+        //operation/cad_cars.php
+        elseif($type == 'RequestIdModel') 
+            $query = $sql->BuildSelecFromWhere('id', 'modelo', 'nome', $var);
+        
+        //operation/cad_cars.php
+        elseif($type == 'RequestIdMark') 
+            $query = $sql->BuildSelecFromWhere('id', 'marca', 'nome', $var);
+         
+        return $sql->mySqlResult($query);   
     }
+    
+    //
+    //VALIDATE
+    //
     
     public static function Validate($type, $toCheck){
         
+        //Realize a query for validate if that variable ($toCheck) is valid
+        
         $sql = new SQLService;
         
-        if($type == 'CheckUser'){
-            
-             //Realize a query for validate if that variable ($toCheck) is valid
+        //this::request('requestAccess') & operation/cad_cars.php
+        if($type == 'CheckUser') 
             $query = $sql->BuildSelectCountWhere('pessoas', 'usuario', $toCheck);
-            $result = $sql->mySqlFechArray($query);
+
+        elseif($type == 'CheckPass') 
+            $query = $sql->BuildSelectCountWhere('pessoas', 'senha', md5($toCheck));
+
+        //operation/cad_cars.php
+        elseif($type == 'CheckMark')
+            $query = $sql->BuildSelectCountWhere('marca', 'nome', $toCheck);
+
+        //operation/cad_cars.php
+        elseif($type == 'CheckModel') 
+            $query = $sql->BuildSelectCountWhere('modelo', 'nome', $toCheck);
+        
+        //operation/cad_cars.php
+        elseif($type == 'CheckBoard') 
+            $query = $sql->BuildSelectCountWhere('carro', 'placa', $toCheck);
             
-            if($result[0] > 0)
-                return 'valido';
-            else
-                return 'invalido';
+        $result = $sql->mySqlFechArray($query);
+        return $sql->validateSQLExecutes($result, 'no');
+    }
+    
+    
+    
+    public static function Insert($type, $objct){
+        
+        if($type = 'insertCar'){
+            $command = SQLService::BuildInsertCar($objct->getIdUser(), $objct->getBoard(),$objct->getMark(), $objct->getModel());
+            $exeCmmd = SQLService::OnlySendQuery($command);
             
+            return $validate;
         }
-        
     }
-    
-    public static function Insert(){
-        
-    }
-    
     public static function Update(){
-        
     }
-    
     public static function Delet(){
-        
     }
-    
-    
-    
 }
 
 SqlController::init();

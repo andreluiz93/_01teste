@@ -2,9 +2,9 @@
 <?php
 
 require '../sql_service.php';
+require '../objects.car.php';
 
-
-
+/*
 class CadCars {
     
     public static function init() {
@@ -17,9 +17,8 @@ class CadCars {
     
     public function teste(){
     }
-    
-    
 }
+*/
 
 if($_POST["user"] == "" || $_POST["placa"] == "" || 
    $_POST["marca"] == "" || $_POST["mod"] == "") {
@@ -32,21 +31,24 @@ $postPlaca = $_POST["placa"];
 $postMarca = $_POST["marca"];
 $postMod = $_POST["mod"];
 
-$validUser = SQL::checkUser($postUser);
-$validMarca = SQL::checkMarca($postMarca);
-$validModelo = SQL::checkModelo($postMod);
-$validPlaca = SQL::checkPlaca($postPlaca);
+$validUser = SqlController::validate('CheckUser', $postUser);
+$validMarca = SqlController::validate('CheckMark', $postMarca);
+$validModelo = SqlController::validate('CheckModel', $postMod);
+$validPlaca = SqlController::validate('CheckBoard', $postPlaca);
     
-if($validUser == "existe"){
-    if($validMarca == "existe"){
-        if($validModelo == "existe"){
-            if($validPlaca == "nao existe"){
+if($validUser == "valido"){
+    if($validMarca == "valido"){
+        if($validModelo == "valido"){
+            if($validPlaca == "invalido"){
                 
-                $user= SQL::requestIDUser($postUser);
-                $modelo = SQL::requestIDModelo($postMod);
-                $marca = SQL::requestIDMarca($postMarca);
 
-                $valid = SQL::insertCar($user, $postPlaca, $marca, $modelo);
+                $idUser= SqlController::Request('RequestIdUser', $postUser);
+                $modelo = SqlController::Request('RequestIdModel', $postMod);
+                $marca = SqlController::Request('RequestIdMark', $postMarca);
+                
+                $car = new Car($user, $postMarca, $marca, $modelo);
+                
+                $valid = SqlController::Insert('InsertCar', $car);
                 
                 if($valid) echo "added";
                 else echo $valid;
@@ -74,4 +76,5 @@ else{
     echo "!user";
     return;
 }
+
 ?>
